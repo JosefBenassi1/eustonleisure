@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
@@ -41,7 +43,7 @@ import javafx.stage.Stage;
  *
  * @author josefbenassi
  */
-public class FXMLEmailController  implements Initializable{
+public class FXMLEmailController extends Message implements Initializable{
 
     @FXML      
     TextField subject ,sender,sirNumber,sirDescription;
@@ -57,19 +59,19 @@ public class FXMLEmailController  implements Initializable{
     
    
     
-        @Override
-       public void initialize(URL url, ResourceBundle rb) {
+   @Override
+   public void initialize(URL url, ResourceBundle rb) {
 
-        Send_Message.GenerateMessageID("E", messageID);
+        GenerateMessageID("E", messageID);
         sirNumber.setEditable(false);
         sirDescription.setEditable(false);
         
-        Send_Message.showWordCount(wordcount, mContent);
+        showWordCount(wordcount, mContent);
        
  }  
     
     
-    @FXML
+   @FXML
    private void sirCheckBoxClick(ActionEvent event) throws IOException{
         subject.setText("");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -97,51 +99,89 @@ public class FXMLEmailController  implements Initializable{
    @FXML
    private void clickSendBtn(ActionEvent event) throws IOException{
         
-      int wc = 1028; 
-       String check = " ";
-        
-//       if(check.equals(mContent.getText()) || mContent.getText().length() >= wc){
-//      
-//          Alert.disply("Error", "You either have no conent in your message or have exceeded 1028 character limit");
-//   
-//        }if(!sender.getText().contains("@")&& !sender.getText().contains(".com")){
-//      
-//      
-//          Alert.disply("Error", "please enter a proper email address");
-//      
-//      }if(sirCheckBox.isSelected() && sirNumber.getText().equals(check)&& sirDescription.getText().equals(check)&& !sender.getText().contains("@")&& !sender.getText().contains(".com")){
-//      
-//           Alert.disply("Error", "SIR email type has been selected. Make sure all boxes are not empty and email is in correct format. We only except .com emails");
-//      
-//      }if(!sirCheckBox.isSelected() && subject.getText().equals(check)){
-//         Alert.disply("Error", "please fill in subject feild");
-//
-//      }if(!sirCheckBox.isSelected() && sender.getText().contains("@")&& !sender.getText().contains(".com")){
-//         Alert.disply("Error", "only accept .com emails");
-//
-//      }
-//      
-//      if(!sirCheckBox.isSelected() && subject.getText().equals(check)&&!sender.getText().contains("@")&& !sender.getText().contains(".com")){
-//      
-//             Alert.disply("Error", "please fill in subject and make sure emial is in correct format. We only accept .com emails");
-//      }
-      
-       
-      
+   int wc = 1028; 
+   String check = "";
+
+    String natureOfIncident = 
+    "Theft of Properties\n" +
+    "Staff Attack\n" +
+    "Device Damage\n" +
+    "Raid\n" +
+    "Customer Attack\n" +
+    "Staff Abuse\n" +
+    "Bomb Threat\n" +
+    "Terrorism\n" +
+    "Suspicious Incident\n" +
+    "Sport Injury\n" +
+    "Personal Info Leak ";
+  
     
-      if(!mContent.getText().equals(check) && mContent.getText().length() >5 && !subject.getText().equals(check) && sender.getText().contains("@")&& sender.getText().contains(".com") ){
+   if(!sirCheckBox.isSelected()){
+      
+      if(sender.getText().equals(check)){Alert.disply("Error","Sender Empty"); return;}
+      
+      if(!isValidEmail(sender.getText())){Alert.disply("Error","Email is not valid. Example: josefbenassi@gmail.com"); return;}
+      
+      if(subject.getText().equals(check)){Alert.disply("Error","Subject empty"); return;}
+      
+      if (!isValidSubject(subject.getText())){Alert.disply("Error","Subject empty or contains numbers"); return;}
+      
+      if(mContent.getText().equalsIgnoreCase(check)){Alert.disply("Error","Your have not typed an Email!"); return;}
+      
+      if(mContent.getText().length() <=5){Alert.disply("Error","Please type a longer message"); return;}
+    
+   }
+   if(sirCheckBox.isSelected()){
+        
+        if(!isValidCenterCode(sirNumber.getText())){Alert.disply("Error","Please enter a valid cosde. Example: 66-222-555"); return;}
+        
+        if(!sirDescription.getText().equalsIgnoreCase("Theft of Properties")&&!sirDescription.getText().equalsIgnoreCase("Staff Attack")&&!sirDescription.getText().equalsIgnoreCase("Device Damage")
+         &&!sirDescription.getText().equalsIgnoreCase("Raid")&&!sirDescription.getText().equalsIgnoreCase("Customer Attack")&&!sirDescription.getText().equalsIgnoreCase("Staff Abuse")
+         &&!sirDescription.getText().equalsIgnoreCase("Terrorism")&&!sirDescription.getText().equalsIgnoreCase("Bomb Attack")&&!sirDescription.getText().equalsIgnoreCase("Suspicious Incident")&&!sirDescription.getText().equalsIgnoreCase("Sport Injury")
+         &&!sirDescription.getText().equalsIgnoreCase("Personal Info Leak")){Alert.disply("Error","Nature of Incident must be one of the following:"+natureOfIncident); return; }
+        
+        if(mContent.getText().equalsIgnoreCase(check)){Alert.disply("Error","Your have not typed an Email!"); return;}
+      
+        if(mContent.getText().length() <=5){Alert.disply("Error","Please type a longer message"); return;}
+   }
+    
+      
+          changeEmailContent(mContent.getText(), messageID, sender, subject, sirNumber, sirDescription, fileName);
           
-          Send_Message.changeEmailContent(mContent.getText(), messageID, sender, subject, fileName);
-          
-          //messageContains(mContent.getText());
+         
           
           Parent _send_message_parent = FXMLLoader.load(getClass().getResource("FXMLSentScreen.fxml"));
           Scene _send_message_scene = new Scene(_send_message_parent,1000,600);
           Stage _app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
           _app_stage.setScene(_send_message_scene);
           _app_stage.show();
-        }
-      }
+    
+  }
+      
+
+   
+  
+    
+   
+     private boolean isValidSubject(String s){      
+     String regex="[A-Za-z\\s]+";      
+     return s.matches(regex);//returns true if input and regex matches otherwise false;
+    }
+    
+     private boolean isValidEmail(String s){
+     
+     String regex = "^([_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{1,6}))?$";
+     return s.matches(regex);
+     
+     }
+      private boolean isValidCenterCode(String s){
+     
+     String regex = "(\\d+)-(\\d+)-(\\d+)";
+     return s.matches(regex);
+     
+     }
+     
+   
   }
          
          
