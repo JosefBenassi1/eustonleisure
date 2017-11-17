@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eustonleisure.FXMLReadController">
+   <children>
+      <VBox layoutY="-1.0" prefHeight="600.0" prefWidth="1229.0" spacing="10.0">
+         <children>
+            <TableView fx:id="tableView" prefHeight="638.0" prefWidth="1229.0">
+              <columns>
+                <TableColumn fx:id="messageID" minWidth="-1.0" prefWidth="92.0" text="Message ID" />
+                  <TableColumn fx:id="sender" minWidth="-1.0" prefWidth="206.0" text="Sender" />
+                  <TableColumn fx:id="subject" minWidth="-1.0" prefWidth="92.0" text="Subject" />
+                  <TableColumn fx:id="message" minWidth="1000.0" prefWidth="1000.0" resizable="false" text="Message" />
+              </columns>
+            </TableView>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

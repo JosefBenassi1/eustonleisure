@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eustonleisure.FXMLEmailController">
+   <children>
+      <StackPane prefHeight="85.0" prefWidth="600.0" style="-fx-background-color: orange;">
+         <children>
+            <Label prefHeight="29.0" prefWidth="64.0" text="Email">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+      <HBox prefHeight="48.0" prefWidth="600.0" style="-fx-background-color: lightgrey;">
+         <children>
+            <StackPane prefHeight="77.0" prefWidth="29.0" />
+            <Label prefHeight="77.0" prefWidth="216.0" text="Message ID">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="messageID" prefHeight="77.0" prefWidth="279.0">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox prefHeight="23.0" prefWidth="600.0" style="-fx-background-color: #eae5e5#eae5e5;">
+         <children>
+            <Label prefHeight="37.0" prefWidth="188.0" text="Sender:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="sender" prefHeight="42.0" prefWidth="347.0" promptText="Your Email Address" />
+         </children>
+      </HBox>
+      <HBox prefHeight="32.0" prefWidth="600.0" style="-fx-background-color: grey;">
+         <children>
+            <Label prefHeight="27.0" prefWidth="189.0" text="Subject:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="subject" prefHeight="27.0" prefWidth="346.0" promptText="Subject " />
+            <CheckBox fx:id="sirCheckBox" mnemonicParsing="false" onAction="#sirCheckBoxClick" text="SIR" textFill="WHITE" />
+         </children>
+      </HBox>
+      <StackPane prefHeight="44.0" prefWidth="600.0">
+         <children>
+            <TextField fx:id="sirNumber" promptText="Sport Centre CodeSport Centre Code" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="46.0" prefWidth="600.0">
+         <children>
+            <TextField fx:id="sirDescription" promptText="Nature of IncidentNature of Incident" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="185.0" prefWidth="600.0">
+         <children>
+            <TextArea fx:id="mContent" prefHeight="135.0" prefWidth="600.0" text="&#10;&#10;" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="29.0" prefWidth="600.0">
+         <children>
+            <Button id="sendBtn" fx:id="sendBtn" mnemonicParsing="false" onAction="#clickSendBtn" text="Send" />
+         </children>
+      </StackPane>
+      <HBox prefHeight="53.0" prefWidth="600.0">
+         <children>
+            <StackPane prefHeight="51.0" prefWidth="385.0">
+               <children>
+                  <Label text="Word Count" />
+               </children>
+            </StackPane>
+            <StackPane prefHeight="51.0" prefWidth="387.0">
+               <children>
+                  <Label fx:id="wordcount" prefHeight="20.0" prefWidth="278.0" />
+               </children>
+            </StackPane>
+         </children>
+      </HBox>
+   </children>
+</VBox>

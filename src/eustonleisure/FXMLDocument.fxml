@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="642.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eustonleisure.FXMLDocumentController">
+   <children>
+      <StackPane prefHeight="66.0" prefWidth="600.0" style="-fx-background-color: orange;">
+         <children>
+            <Label prefHeight="52.0" prefWidth="305.0" text="Euston Leisure">
+               <font>
+                  <Font name="Ayuthaya" size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+      <StackPane prefHeight="46.0" prefWidth="642.0" style="-fx-background-color: orange;">
+         <children>
+            <Label text="Welcome!">
+               <font>
+                  <Font name="Apple Chancery" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+      <StackPane prefHeight="27.0" prefWidth="642.0" />
+      <StackPane prefHeight="133.0" prefWidth="642.0">
+         <children>
+            <Button fx:id="sendMessage" mnemonicParsing="false" onAction="#clickSendMessage" style="-fx-background-color: #42c991#42c991;" text="Send Message" textFill="WHITE" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="133.0" prefWidth="642.0">
+         <children>
+            <Button fx:id="viewMessages" mnemonicParsing="false" onAction="#clickViewMessages" style="-fx-background-color: #42c991#42c991;" text="View Messages" textFill="WHITE" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="125.0" prefWidth="642.0">
+         <children>
+            <Button fx:id="viewLists" mnemonicParsing="false" onAction="#clickViewList" prefHeight="27.0" prefWidth="113.0" style="-fx-background-color: #42c991#42c991;" text="View Lists" textFill="WHITE" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="150.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="translateFile" mnemonicParsing="false" onAction="#clickTranslateFile" prefHeight="27.0" prefWidth="114.0" style="-fx-background-color: #42c991#42c991 #42c991#42c991;" text="Translate A File" textFill="WHITE" />
+         </children>
+      </StackPane>
+   </children>
+</VBox>
