@@ -148,7 +148,7 @@ public class FXMLTweetController implements Initializable {
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
-        //String example = " Hello charles LOL, LTM, LTNS LYLAS";
+        
        
         
                 
