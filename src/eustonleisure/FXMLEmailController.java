@@ -53,37 +53,24 @@ public class FXMLEmailController  implements Initializable{
     @FXML
     CheckBox sirCheckBox;
     
+    String fileName = "/Users/josefbenassi/Documents/jsonjoe.json";
+    
    
     
-    
-    
-     
-    // method that does shit when email padge is loaded.
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
-        GenerateMessageId(messageID);
+        @Override
+       public void initialize(URL url, ResourceBundle rb) {
+
+        Send_Message.GenerateMessageID("E", messageID);
         sirNumber.setEditable(false);
         sirDescription.setEditable(false);
         
-        
-        int wc =   mContent.getText().length();
-        wordcount.setText(Integer.toString(wc));
-        
-        mContent.textProperty().addListener(new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable,
-                String oldValue, String newValue) {
-
-            wordcount.setText(Integer.toString(newValue.length()).trim());
-        }
-    });
+        Send_Message.showWordCount(wordcount, mContent);
        
  }  
     
     
     @FXML
-    private void sirCheckBoxClick(ActionEvent event) throws IOException{
+   private void sirCheckBoxClick(ActionEvent event) throws IOException{
         subject.setText("");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
@@ -108,43 +95,45 @@ public class FXMLEmailController  implements Initializable{
    
     
    @FXML
-    private void clickSendBtn(ActionEvent event) throws IOException{
+   private void clickSendBtn(ActionEvent event) throws IOException{
         
       int wc = 1028; 
        String check = " ";
         
-       if(check.equals(mContent.getText()) || mContent.getText().length() >= wc){
-      
-          Alert.disply("Error", "You either have no conent in your message or have exceeded 1028 character limit");
-   
-        }if(!sender.getText().contains("@")&& !sender.getText().contains(".com")){
-      
-      
-          Alert.disply("Error", "please enter a proper email address");
-      
-      }if(sirCheckBox.isSelected() && sirNumber.getText().equals(check)&& sirDescription.getText().equals(check)&& !sender.getText().contains("@")&& !sender.getText().contains(".com")){
-      
-           Alert.disply("Error", "SIR email type has been selected. Make sure all boxes are not empty and email is in correct format. We only except .com emails");
-      
-      }if(!sirCheckBox.isSelected() && subject.getText().equals(check)){
-         Alert.disply("Error", "please fill in subject feild");
-
-      }if(!sirCheckBox.isSelected() && sender.getText().contains("@")&& !sender.getText().contains(".com")){
-         Alert.disply("Error", "only accept .com emails");
-
-      }
-      
-      if(!sirCheckBox.isSelected() && subject.getText().equals(check)&&!sender.getText().contains("@")&& !sender.getText().contains(".com")){
-      
-             Alert.disply("Error", "please fill in subject and make sure emial is in correct format. We only accept .com emails");
-      }
+//       if(check.equals(mContent.getText()) || mContent.getText().length() >= wc){
+//      
+//          Alert.disply("Error", "You either have no conent in your message or have exceeded 1028 character limit");
+//   
+//        }if(!sender.getText().contains("@")&& !sender.getText().contains(".com")){
+//      
+//      
+//          Alert.disply("Error", "please enter a proper email address");
+//      
+//      }if(sirCheckBox.isSelected() && sirNumber.getText().equals(check)&& sirDescription.getText().equals(check)&& !sender.getText().contains("@")&& !sender.getText().contains(".com")){
+//      
+//           Alert.disply("Error", "SIR email type has been selected. Make sure all boxes are not empty and email is in correct format. We only except .com emails");
+//      
+//      }if(!sirCheckBox.isSelected() && subject.getText().equals(check)){
+//         Alert.disply("Error", "please fill in subject feild");
+//
+//      }if(!sirCheckBox.isSelected() && sender.getText().contains("@")&& !sender.getText().contains(".com")){
+//         Alert.disply("Error", "only accept .com emails");
+//
+//      }
+//      
+//      if(!sirCheckBox.isSelected() && subject.getText().equals(check)&&!sender.getText().contains("@")&& !sender.getText().contains(".com")){
+//      
+//             Alert.disply("Error", "please fill in subject and make sure emial is in correct format. We only accept .com emails");
+//      }
       
        
       
     
       if(!mContent.getText().equals(check) && mContent.getText().length() >5 && !subject.getText().equals(check) && sender.getText().contains("@")&& sender.getText().contains(".com") ){
           
-          messageContains(mContent.getText());
+          Send_Message.changeEmailContent(mContent.getText(), messageID, sender, subject, fileName);
+          
+          //messageContains(mContent.getText());
           
           Parent _send_message_parent = FXMLLoader.load(getClass().getResource("FXMLSentScreen.fxml"));
           Scene _send_message_scene = new Scene(_send_message_parent,1000,600);
@@ -153,73 +142,7 @@ public class FXMLEmailController  implements Initializable{
           _app_stage.show();
         }
       }
-   
-       
-       private void GenerateMessageId(Label label){
-       
-           
-        long timeSeed = System.nanoTime(); 
-
-        double randSeed = Math.random() * 1000; 
-
-        long midSeed = (long) (timeSeed * randSeed);
-        
-        String s = midSeed + "";
-        String subStr = s.substring(0, 9);
-
-        int finalSeed = Integer.parseInt(subStr);    // integer value   
-       
-        label.setText("E"+Integer.toString(finalSeed));
-       
-    }
-       
-       private void writeToJsonFile(String email) throws IOException{
-         
-        
-           
-        JSONObject obj = new JSONObject();
-        obj.put("MID", messageID.getText());
-        obj.put("Sender", sender.getText());
-        obj.put("Subject", subject.getText());
-        obj.put("Message", sirNumber.getText()+""+sirDescription.getText()+""+email);
-       
-      try{ 
-       
-            File file = new File("/Users/josefbenassi/Documents/jsonjoe.json"); 
-
-            if (!file.exists()) {
-            file.createNewFile();
-            }
-
-            try (FileWriter fw = new FileWriter(file.getAbsoluteFile(),true); BufferedWriter bw = new BufferedWriter(fw)) {
-                bw.append(obj.toJSONString()+"\r");
-                bw.flush();
-            }
-            System.out.println("Successfully Copied JSON Object to File...");
-
-            } catch (IOException e) {
-        }
-
-   }
-       
-    /**
-     *
-     * @param emailContent
-     * @return
-     * @throws IOException
-     */
-   private String messageContains(String emailContent) throws IOException{
-     
-        String replace = emailContent.replaceAll("www.[^www.]*.com", "<Quarintined> ");
-        String replaceAll = replace.replaceAll("www.[^www.]*.co.uk", "<Quarintined> ");
-        System.out.println(replaceAll);
-               
-               System.out.println(replaceAll);
-               writeToJsonFile(replaceAll);
-               return replaceAll;
-     }
-     
-}
+  }
          
          
             
