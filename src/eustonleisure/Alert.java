@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  */
 public class Alert {
     
-
+// push worked
 public static void disply (String title , String message){
 
 
