@@ -8,6 +8,7 @@ package eustonleisure;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,7 +37,7 @@ import org.json.simple.JSONObject;
  *
  * @author josefbenassi
  */
-public class FXMLSmsController implements Initializable {
+public class FXMLSmsController extends Message implements Initializable {
 
     
      
@@ -49,6 +50,7 @@ public class FXMLSmsController implements Initializable {
     @FXML
     Label messageID, wordcount;
     
+    String file = "/Users/josefbenassi/Documents/jsonjoe.json";
     
     
     
@@ -59,137 +61,44 @@ public class FXMLSmsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        GenerateMessageId(messageID);
-        
-        int wc =   mContent.getText().length();
-        wordcount.setText(Integer.toString(wc));
-        mContent.textProperty().addListener(new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable,
-        String oldValue, String newValue) {
-        wordcount.setText(Integer.toString(newValue.length()).trim());
-        }
-    
-        });
+        GenerateMessageID("S",messageID);
+        showWordCount(wordcount, mContent);
     }    
     
     
      
-   @FXML
+    @FXML
     private void clickSendBtn(ActionEvent event) throws IOException{
       
       int wc = 140;
       String check = "";
       
-        
-      if(check.equals(mContent.getText()) || mContent.getText().length() >= wc){
+      if(sender.getText().equals(check)){Alert.disply("Error","Sender Empty"); return;}
       
-          Alert.disply("Error", "You either have no conent in your message or have exceeded 140 character limit");
-   
-      }
+      if(!isValidMobile(sender.getText())){Alert.disply("Error","Please enter a valid Mobile Number eg/ +447735421616"); return;}
       
-    
-      if(!mContent.getText().equals(check) && mContent.getText().length() <= wc ){
-          messageContains(mContent.getText());
+      if(mContent.getText().equalsIgnoreCase(check)){Alert.disply("Error","Your have not typed an Email!"); return;}
+      
+      if(mContent.getText().length() <=5){Alert.disply("Error","Please type a longer message"); return;}
+          
+          changeSmsOrTweetContent(file, mContent, messageID, sender); 
           
           Parent _send_message_parent = FXMLLoader.load(getClass().getResource("FXMLSentScreen.fxml"));
           Scene _send_message_scene = new Scene(_send_message_parent,1000,600);
           Stage _app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
           _app_stage.setScene(_send_message_scene);
           _app_stage.show();
-        }
-      }
-      
-   
-       
-       private void GenerateMessageId(Label label){
-       
-           
-        long timeSeed = System.nanoTime(); 
-
-        double randSeed = Math.random() * 1000; 
-
-        long midSeed = (long) (timeSeed * randSeed);
         
-        String s = midSeed + "";
-        String subStr = s.substring(0, 9);
-
-        int finalSeed = Integer.parseInt(subStr);    // integer value   
-       
-        label.setText("S"+Integer.toString(finalSeed));
-       
-    }
-       
-       private void writeToJsonFile(StringBuilder sb) throws IOException{
-         
-        
-           
-        JSONObject obj = new JSONObject();
-        obj.put("MID", messageID.getText());
-        obj.put("Sender",sender.getText());
-        obj.put("Subject","n/a");
-        obj.put("Message",sb.toString());
-        
-       
-      try{ 
-       
-            File file = new File("/Users/josefbenassi/Documents/jsonjoe.json"); 
-
-            if (!file.exists()) {
-            file.createNewFile();
-            }
-
-            try (FileWriter fw = new FileWriter(file.getAbsoluteFile(),true); BufferedWriter bw = new BufferedWriter(fw)) {
-               
-                bw.append(obj.toJSONString()+"\r");
-                bw.flush();
-            }
-            System.out.println("Successfully Copied JSON Object to File...");
-
-            } catch (IOException e) {
-        }
-
-   }
-       
-           
-     private void messageContains(String messageContent) throws IOException{
-     
-        String csvFile = "/Users/josefbenassi/Documents/textwords.csv";
-        BufferedReader br = null;
-        String line = "";
-        String cvsSplitBy = ",";
-        //String example = " Hello charles LOL, LTM, LTNS LYLAS";
-       
-        
-                
-         HashMap<String,String> textwords = new HashMap<>();
-         
-         
-       
-         br = new BufferedReader(new FileReader(csvFile));
-            
-             while ((line = br.readLine()) != null) {
-                   
-                   String[] csv_file = line.split(cvsSplitBy); 
-                   textwords.put(csv_file[0],csv_file[1]);
-                 
-             }
-            
-         
-           
-           StringTokenizer st = new StringTokenizer(messageContent," \t\n\r\f,.:;?![]'",true);
-           
-           StringBuilder sb = new StringBuilder();
-           while(st.hasMoreTokens())
-           {
-               String token = st.nextToken();
-               
-               sb.append(textwords.getOrDefault(token,token)).append("");   
-            }
-               
-               System.out.println(sb);
-               writeToJsonFile(sb);
-           }
        }
+   
+     private boolean isValidMobile(String s){      
+     String regex="+(\\d+)";      
+     return s.matches(regex);//returns true if input and regex matches otherwise false;
+    }
+
+}
+    
+     
+
     
 
