@@ -50,7 +50,8 @@ public class FXMLSmsController extends Message implements Initializable {
     @FXML
     Label messageID, wordcount;
     
-    String file = "/Users/josefbenassi/Documents/jsonjoe.json";
+    String fileWrite = "/Users/josefbenassi/Documents/jsonjoe.json";
+    String fileRead  = "/Users/josefbenassi/Documents/textwords.csv";
     
     
     
@@ -81,7 +82,7 @@ public class FXMLSmsController extends Message implements Initializable {
       
       if(mContent.getText().length() <=5){Alert.disply("Error","Please type a longer message"); return;}
           
-          changeSmsOrTweetContent(file, mContent, messageID, sender); 
+          changeSmsOrTweetContent(fileRead,fileWrite, mContent.getText(), messageID, sender); 
           
           Parent _send_message_parent = FXMLLoader.load(getClass().getResource("FXMLSentScreen.fxml"));
           Scene _send_message_scene = new Scene(_send_message_parent,1000,600);
@@ -90,9 +91,9 @@ public class FXMLSmsController extends Message implements Initializable {
           _app_stage.show();
         
        }
-   
+    
      private boolean isValidMobile(String s){      
-     String regex="+(\\d+)";      
+     String regex="\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}";      
      return s.matches(regex);//returns true if input and regex matches otherwise false;
     }
 
