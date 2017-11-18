@@ -28,11 +28,11 @@ import org.json.simple.JSONObject;
 abstract public class Message {
     
     
-    protected void changeSmsOrTweetContent(String file, TextArea mcontent, Label messageID, TextField sender) throws FileNotFoundException, IOException{
+    protected void changeSmsOrTweetContent(String fileRead, String fileWrite, String mContent, Label messageID, TextField sender) throws FileNotFoundException, IOException{
     
     
         
-    String csvFile = file;
+    String csvFile = fileRead;
     BufferedReader br = null;
     String line = "";
     String cvsSplitBy = ",";
@@ -47,7 +47,7 @@ abstract public class Message {
                    textwords.put(csv_file[0],csv_file[1]);
                }
            
-          StringTokenizer st = new StringTokenizer(mcontent.toString()," \t\n\r\f,.:;?![]'",true);
+          StringTokenizer st = new StringTokenizer(mContent," \t\n\r\f,.:;?![]'",true);
           StringBuilder   sb = new StringBuilder();
         
           while(st.hasMoreTokens()){
@@ -55,7 +55,7 @@ abstract public class Message {
                sb.append(textwords.getOrDefault(token,token)).append("");   
             }
         
-          writeToJsonFileNotEmail(messageID,sender, sb, file);
+          writeToJsonFileNotEmail(messageID,sender, sb, fileWrite);
         
     }
     
