@@ -38,12 +38,12 @@ import javafx.stage.Stage;
  import org.json.simple.JSONObject;
 
 
-/**
+    /**
  * FXML Controller class
  *
  * @author josefbenassi
  */
-public class FXMLEmailController extends Message implements Initializable{
+    public class FXMLEmailController extends Message implements Initializable{
 
     @FXML      
     TextField subject ,sender,sirNumber,sirDescription;
@@ -56,11 +56,9 @@ public class FXMLEmailController extends Message implements Initializable{
     CheckBox sirCheckBox;
     
     String fileName = "/Users/josefbenassi/Documents/jsonjoe.json";
-    
    
-    
-   @Override
-   public void initialize(URL url, ResourceBundle rb) {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
 
         GenerateMessageID("E", messageID);
         sirNumber.setEditable(false);
@@ -69,10 +67,9 @@ public class FXMLEmailController extends Message implements Initializable{
         showWordCount(wordcount, mContent);
        
  }  
-    
-    
-   @FXML
-   private void sirCheckBoxClick(ActionEvent event) throws IOException{
+  
+    @FXML
+    private void sirCheckBoxClick(ActionEvent event) throws IOException{
         subject.setText("");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
@@ -95,9 +92,8 @@ public class FXMLEmailController extends Message implements Initializable{
         }
     }
    
-    
-   @FXML
-   private void clickSendBtn(ActionEvent event) throws IOException{
+    @FXML
+    private void clickSendBtn(ActionEvent event) throws IOException{
         
    int wc = 1028; 
    String check = "";
@@ -157,24 +153,20 @@ public class FXMLEmailController extends Message implements Initializable{
           _app_stage.show();
     
   }
-      
-
-   
-  
-    
-   
-     private boolean isValidSubject(String s){      
+ 
+    private boolean isValidSubject(String s){      
      String regex="[A-Za-z\\s]+";      
      return s.matches(regex);//returns true if input and regex matches otherwise false;
     }
     
-     private boolean isValidEmail(String s){
+    private boolean isValidEmail(String s){
      
      String regex = "^([_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{1,6}))?$";
      return s.matches(regex);
      
      }
-      private boolean isValidCenterCode(String s){
+   
+    private boolean isValidCenterCode(String s){
      
      String regex = "(\\d+)-(\\d+)-(\\d+)";
      return s.matches(regex);
