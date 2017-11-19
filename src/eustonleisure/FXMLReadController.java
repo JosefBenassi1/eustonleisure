@@ -52,7 +52,7 @@ public class FXMLReadController implements Initializable {
         
         try {
             //load dummy data
-            tableView.setItems(getPeople());
+            tableView.setItems(getTableContent());
         } catch (ParseException | IOException ex) {
             Logger.getLogger(FXMLReadController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,10 +60,10 @@ public class FXMLReadController implements Initializable {
     }    
     
  
-    public ObservableList<Table>  getPeople() throws ParseException, FileNotFoundException, IOException
+    public ObservableList<Table>  getTableContent() throws ParseException, FileNotFoundException, IOException
     {
              
-    ObservableList<Table> people = FXCollections.observableArrayList();    
+    ObservableList<Table> tableContent = FXCollections.observableArrayList();    
     ArrayList<JSONObject> json=new ArrayList<>();
     JSONObject obj;
     // The name of the file to open.
@@ -76,24 +76,23 @@ public class FXMLReadController implements Initializable {
         // FileReader reads text files in the default encoding.
         FileReader fileReader = new FileReader(fileName);
 
-        // Always wrap FileReader in BufferedReader.
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-        while((line = bufferedReader.readLine()) != null) {
-         obj = (JSONObject) new JSONParser().parse(line);
-         json.add(obj);
-         people.add(new Table((String)obj.get("MID"),(String)obj.get("Sender"),(String)obj.get("Subject"),(String)obj.get("Message")));
-           // System.out.println((String)obj.get("Email ID")+":"+ (String)obj.get("Message"));
+        try ( // Always wrap FileReader in BufferedReader.
+                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            while ((line = bufferedReader.readLine()) != null) {
+                obj = (JSONObject) new JSONParser().parse(line);
+                json.add(obj);
+                tableContent.add(new Table((String)obj.get("MID"),(String)obj.get("Sender"),(String)obj.get("Subject"),(String)obj.get("Message").toString().replaceAll("\\b((?:https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])", "<URl Quarintined>")));
+                // System.out.println((String)obj.get("Email ID")+":"+ (String)obj.get("Message"));
+            }
+            // Always close files.
         }
-        // Always close files.
-        bufferedReader.close();         
     }
     catch(FileNotFoundException ex) {
         System.out.println("Unable to open file '" + fileName + "'");                
     }catch(IOException ex) {
         System.out.println("Error reading file '" + fileName + "'");                  
   }
-  return people;
+  return tableContent;
     
     }  
 
