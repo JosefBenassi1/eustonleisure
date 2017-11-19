@@ -125,9 +125,15 @@ import javafx.stage.Stage;
       if(mContent.getText().equalsIgnoreCase(check)){Alert.disply("Error","Your have not typed an Email!"); return;}
       
       if(mContent.getText().length() <=5){Alert.disply("Error","Please type a longer message"); return;}
+      
+      changeEmailContent(mContent.getText(), messageID, sender,subject, fileName);
     
    }
    if(sirCheckBox.isSelected()){
+        
+        if(sender.getText().equals(check)){Alert.disply("Error","Sender Empty"); return;}
+      
+        if(!isValidEmail(sender.getText())){Alert.disply("Error","Email is not valid. Example: josefbenassi@gmail.com"); return;}
         
         if(!isValidCenterCode(sirNumber.getText())){Alert.disply("Error","Please enter a valid cosde. Example: 66-222-555"); return;}
         
@@ -139,10 +145,12 @@ import javafx.stage.Stage;
         if(mContent.getText().equalsIgnoreCase(check)){Alert.disply("Error","Your have not typed an Email!"); return;}
       
         if(mContent.getText().length() <=5){Alert.disply("Error","Please type a longer message"); return;}
+        
+        changeEmailContentSir(mContent.getText(), messageID, sender, subject, sirNumber, sirDescription, fileName);
    }
     
       
-          changeEmailContent(mContent.getText(), messageID, sender, subject, sirNumber, sirDescription, fileName);
+          
           
          
           
@@ -174,6 +182,7 @@ import javafx.stage.Stage;
      }
      
    
+ 
   }
          
          
