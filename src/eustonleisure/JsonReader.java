@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -6,9 +6,11 @@
 package eustonleisure;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +23,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.stage.FileChooser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -32,7 +36,12 @@ import org.json.simple.parser.ParseException;
  */
 abstract public class JsonReader {
     
-
+ protected    String URLRegex = "\\b((?:https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])";
+ protected    String hashRegex = "#\\s*(\\w+)";
+ protected    String mentionRegex = "@\\s*(\\w+)";
+ protected    String sirRegex= "\\|(.*?)\\|";
+ protected    String file = "/Users/josefbenassi/Documents/jsonjoe.json";
+    
 protected void  getTrendsForList(String file, String jsonName, String regex, String symbol, String trendDescription,TextArea textArea){
 
         
@@ -41,7 +50,7 @@ protected void  getTrendsForList(String file, String jsonName, String regex, Str
         HashMap<String,Integer> list = new HashMap<>();
         ArrayList<String> mine = new ArrayList<>();
 
-        // This will reference one line at a time
+        // This will reference one line at a timekjn;k
         String line = null;
 
         try {
@@ -73,7 +82,7 @@ protected void  getTrendsForList(String file, String jsonName, String regex, Str
                
                for (Object e : a) {
 
-                String name = symbol+((Map.Entry<String, Integer>) e).getKey() + trendDescription+ ((Map.Entry<String, Integer>) e).getValue()+" times"+"\n"+"\n";
+                String name = symbol+" "+((Map.Entry<String, Integer>) e).getKey() +" " + trendDescription+ ((Map.Entry<String, Integer>) e).getValue()+" times"+"\n"+"\n";
                 String replace = name.replace("[","").replace("]","").replace("{", "").replace("}", "");
                 textArea.appendText(replace);
 
@@ -92,4 +101,23 @@ protected void  getTrendsForList(String file, String jsonName, String regex, Str
 
        }
 
+
+ protected void selectFile(Label label){
+        
+       
+    FileChooser fc = new FileChooser();
+    fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Json Files","*.json"));
+    File selectedFile = fc.showOpenDialog(null);
+    
+    if (selectedFile != null) {
+    label.setText(selectedFile.getAbsolutePath());
+    }else{
+    label.setText("File Not valid");
+     }
+     
+   }
+ 
+ 
+ 
+ //"\\|(.*?)\\|"
 }
