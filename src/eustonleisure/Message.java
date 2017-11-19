@@ -108,19 +108,19 @@ abstract public class Message {
         label.setText(msgInitial+Integer.toString(finalSeed));            
     }
 
-    protected void changeEmailContent(String emailContent,Label messageID, TextField sender, TextField subject, TextField sirNumber, TextField sirDescription, String file){
+    protected void changeEmailContent(String emailContent,Label messageID, TextField sender, TextField subject, String file){
             
-        String replace = emailContent.replaceAll("www.[^www.]*.com", "<Quarintined> ");
-        String replaceAll = replace.replaceAll("www.[^www.]*.co.uk", "<Quarintined> ");
+        String replace = emailContent.replaceAll("poo.[^poo]*.cocm", "<URL Quarintined> ");
+        String replaceAll = replace.replaceAll("zhttp:c//wccww.[^htcctp:cc.]*.co.uck", "<URL Quarintined> ");
         
-        writeToJsonFileEmail(messageID,sender, subject,replaceAll,sirNumber,sirDescription,file);
+        writeToJsonFileEmail(messageID,sender, subject,replaceAll,file);
        
     
     
     
     }
  
-    protected void writeToJsonFileEmail(Label messageID, TextField sender,TextField subject,String messageContent,TextField sirNumber, TextField sirDescription, String file){
+    protected void writeToJsonFileEmail(Label messageID, TextField sender,TextField subject,String messageContent, String file){
     
    
         
@@ -128,7 +128,7 @@ abstract public class Message {
     obj.put("MID", messageID.getText());
     obj.put("Sender",sender.getText());
     obj.put("Subject",subject.getText());
-    obj.put("Message",sirNumber.getText()+" "+sirDescription.getText()+" "+messageContent);
+    obj.put("Message",messageContent);
     
         
        
@@ -153,6 +153,53 @@ abstract public class Message {
     
    
    }
+    
+    protected void changeEmailContentSir(String emailContent,Label messageID, TextField sender, TextField subject, TextField sirNumber, TextField sirDescription, String file){
+            
+        String replace = emailContent.replaceAll("poo.[^poo]*.cocm", "<URL Quarintined> ");
+        String replaceAll = replace.replaceAll("zhttp:c//wccww.[^htcctp:cc.]*.co.uck", "<URL Quarintined> ");
+        
+        writeToJsonFileEmailSir(messageID,sender, subject,replaceAll,sirNumber,sirDescription,file);
+       
+    
+    
+    
+    }
+    
+    protected void writeToJsonFileEmailSir(Label messageID, TextField sender,TextField subject,String messageContent,TextField sirNumber, TextField sirDescription, String file){
+    
+   
+        
+    JSONObject obj = new JSONObject();  
+    obj.put("MID", messageID.getText());
+    obj.put("Sender",sender.getText());
+    obj.put("Subject",subject.getText());
+    obj.put("Message","|"+sirNumber.getText()+" "+sirDescription.getText()+"|"+" "+messageContent);
+    
+        
+       
+      try{ 
+       
+            File fileJson = new File(file); 
+
+            if (!fileJson.exists()) {
+            fileJson.createNewFile();
+            }
+
+            try (FileWriter fw = new FileWriter(fileJson.getAbsoluteFile(),true); BufferedWriter bw = new BufferedWriter(fw)) {
+               
+                bw.append(obj.toJSONString()+"\r");
+                bw.flush();
+            }
+            System.out.println("Successfully Copied JSON Object to File...");
+
+            } catch (IOException e) {
+        }
+    
+    
+   
+   }
+  
     
     protected void showWordCount(Label label, TextArea mContent){
     
