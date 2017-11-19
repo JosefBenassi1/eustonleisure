@@ -49,7 +49,7 @@ import org.json.simple.parser.ParseException;
  *
  * @author josefbenassi
  */
-public class FXMLReadFileController implements Initializable {
+public class FXMLReadFileController extends JsonReader implements Initializable {
 
     
      @FXML private Label fileName;
@@ -58,7 +58,7 @@ public class FXMLReadFileController implements Initializable {
      @FXML private TableColumn<Table, String> sender;
      @FXML private TableColumn<Table, String> subject;
      @FXML private TableColumn<Table, String> message;
-     @FXML private TextArea textArea, textArea2, textArea3;
+     @FXML private TextArea textArea, textArea2, textArea3,textArea4;
     
     
      @Override
@@ -83,7 +83,7 @@ public class FXMLReadFileController implements Initializable {
      @FXML
      private void translateClick(ActionEvent event) throws ParseException{
     
-    getURL(fileName.getText());          
+           
     changeFileFormat(fileName.getText());
     translateAndSaveFile(fileName.getText());
         
@@ -100,9 +100,10 @@ public class FXMLReadFileController implements Initializable {
             Logger.getLogger(FXMLReadController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        getMentions();
-        getHashtag();
-        
+       getTrendsForList(fileName.getText(), "Message", hashRegex, "#", "has been tweeted: ", textArea);
+       getTrendsForList(fileName.getText(), "Message", mentionRegex, "@", "has been mentiond:  ", textArea2);
+       getTrendsForList(fileName.getText(), "Message", URLRegex, "URL", "has been found and removed:  ", textArea3);
+       getTrendsForList(fileName.getText(), "Message", sirRegex, "SIR code & Nature", "has been emailed:  ", textArea4);
         
     
     }
@@ -278,16 +279,13 @@ public class FXMLReadFileController implements Initializable {
                
             }else if(findMessageType.contains("E")){
             
-            String replace = (String)obj.get("Message").toString().replaceAll("www.[^www.]*.com", "<Quarintined> ");
-            replace1 = replace.replaceAll("www.[^www.]*.co.uk", "<Quarintined> ");
-            replace2 = replace1.replaceAll("http://www.[^http://www.]*.co.uk", "<Quarintined>");
-            replace3 = replace2.replaceAll("http://www.[^http://www.]*.com", "<Quarintined>");
+            String replace = (String)obj.get("Message").toString().replaceAll("\\b((?:https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])", "<URL Quarintined> ");
                
             JSONObject object = new JSONObject();
             object.put("MID", (String)obj.get("MID"));
             object.put("Sender", (String)obj.get("Sender"));
             object.put("Subject", (String)obj.get("Subject"));
-            object.put("Message", replace3);
+            object.put("Message", replace);
        
       try{ 
        
@@ -305,42 +303,7 @@ public class FXMLReadFileController implements Initializable {
 
             } catch (IOException e) {
         }
-               
-            }else if(findMessageType.contains("E")&&findSubjectType.contains("SIR")){
-                
-              
-                
-                
-            String replace = (String)obj.get("Message").toString().replaceAll("www.[^www.]*.com", "<Quarintined> ");
-            replace1 = replace.replaceAll("www.[^www.]*.co.uk", "<Quarintined> ");
-            replace2 = replace1.replaceAll("http://www.[^http://www.]*.co.uk", "<Quarintined>");
-            replace3 = replace2.replaceAll("http://www.[^http://www.]*.com", "<Quarintined>");
-               
-            JSONObject object = new JSONObject();
-            object.put("MID", (String)obj.get("MID"));
-            object.put("Sender", (String)obj.get("Sender"));
-            object.put("Subject", (String)obj.get("Subject"));
-            object.put("Message", replace3);
-       
-      try{ 
-       
-            File storeFile = new File("/Users/josefbenassi/Documents/storetest.json"); 
-
-            if (!storeFile.exists()) {
-            storeFile.createNewFile();
-            }
-
-            try (FileWriter fw = new FileWriter(storeFile.getAbsoluteFile(),true); BufferedWriter bw = new BufferedWriter(fw)) {
-                bw.append(object.toJSONString()+"\r");
-                bw.flush();
-            }
-            System.out.println("Successfully Copied JSON Object to File...");
-
-            } catch (IOException e) {
-        }
-            
-            
-            
+          
             }else if(findMessageType.contains("F")){
             
             br = new BufferedReader(new FileReader(csvFile));
@@ -426,224 +389,4 @@ public class FXMLReadFileController implements Initializable {
         }
     }
   
-     private void getMentions(){
-        
- //String yourString = "hi #how are #and #hello you you";
- JSONObject obj;
- String getMentions = "/Users/josefbenassi/Documents/storetest.json";
- HashMap<String,Integer> list = new HashMap<>();
- ArrayList<String> mine = new ArrayList<>();
-
-// This will reference one line at a time
-String line = null;
-
-     try {
-        // FileReader reads text files in the default encoding.
-            FileReader fileReader = new FileReader(getMentions);
-
-        // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            while((line = bufferedReader.readLine()) != null) {
-            obj = (JSONObject) new JSONParser().parse(line);
-            String findmention = (String)obj.get("Message");
-            
-            Matcher matches = Pattern.compile("@\\s*(\\w+)").matcher(findmention);
-            while (matches.find()) {
-            mine.add(Arrays.toString(matches.group(1).split(","))) ;
-            
-            }
-            
-            if(matches.find()== false){
-            
-            textArea2.setText("No Mentions found...");
-            
-            
-            }
-            
-            
-        } 
-        
-            Set<String> unique = new HashSet<>(mine);
-            unique.forEach((key) -> {
-                list.put(key,Collections.frequency(mine, key));
-            });
-            bufferedReader.close(); 
-            
-            StringBuilder sb = new StringBuilder();
-            String hash = null;
-            
-            //String formattedString = list.toString().replace("[","").replace("]","").replace("{", "").replace("}", "");
-            Object[] a = list.entrySet().toArray();
-            Arrays.sort(a, new Comparator() {public int compare(Object o1, Object o2) {return ((Map.Entry<String, Integer>) o2).getValue()
-            .compareTo(((Map.Entry<String, Integer>) o1).getValue());
-            
-            }
-                 });
-            
-                   for (Object e : a) {
-                    
-                    String name = "@"+((Map.Entry<String, Integer>) e).getKey() + " has been mentioned "+ ((Map.Entry<String, Integer>) e).getValue()+" times"+"\n"+"\n";
-                    String replace = name.replace("[","").replace("]","").replace("{", "").replace("}", "");
-                    
-                    textArea2.appendText(replace);
-                
-                    }
-            
-//            String formattedString2  = list.keySet().toString().replace("[","").replace("]","").replace("{", "").replace("}", "");
-//            String formattedString3  = list.values().toString().replace("[","").replace("]","").replace("{", "").replace("}", "");
-//            System.out.print(formattedString +" ");
-//            sb.append(formattedString).reverse();
-                
-    }
-    
-    
-        catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + getMentions + "'");                
-        }catch(IOException ex) {
-            System.out.println("Error reading file '" + getMentions + "'");                  
-            // Or we could just do this: 
-            // ex.printStackTrace();
-        } catch (ParseException ex) {
-            Logger.getLogger(FXMLViewListController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-          
-    }
-     
-     private void getHashtag(){
-    
-    
-       //String yourString = "hi #how are #and #hello you you";
-        JSONObject obj;
-        String getHash = "/Users/josefbenassi/Documents/storetest.json";
-        HashMap<String,Integer> list = new HashMap<>();
-        ArrayList<String> mine = new ArrayList<>();
-
-            // This will reference one line at a time
-            String line = null;
-
-        try {
-        // FileReader reads text files in the default encoding.
-            FileReader fileReader = new FileReader(getHash);
-
-        // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            while((line = bufferedReader.readLine()) != null) {
-            obj = (JSONObject) new JSONParser().parse(line);
-            String findhash = (String)obj.get("Message");
-            
-            Matcher matcher = Pattern.compile("#\\s*(\\w+)").matcher(findhash);
-            while (matcher.find()) {
-            mine.add(Arrays.toString(matcher.group(1).split(","))) ;
-            
-            }
-            
-             if(!matcher.find()){
-            
-            textArea.setText("No Hashtags found...");
-            
-            
-            }
-        } 
-        
-            Set<String> unique = new HashSet<>(mine);
-            unique.forEach((key) -> {
-                list.put(key,Collections.frequency(mine, key));
-            });
-            bufferedReader.close(); 
-            
-            StringBuilder sb = new StringBuilder();
-            String hash = null;
-            
-            //String formattedString = list.toString().replace("[","").replace("]","").replace("{", "").replace("}", "");
-            Object[] a = list.entrySet().toArray();
-            Arrays.sort(a, new Comparator() {public int compare(Object o1, Object o2) {return ((Map.Entry<String, Integer>) o2).getValue()
-            .compareTo(((Map.Entry<String, Integer>) o1).getValue());
-            
-            }
-                 });
-                   for (Object e : a) {
-                    
-                    String name = "#"+((Map.Entry<String, Integer>) e).getKey() + " has been tagged "+ ((Map.Entry<String, Integer>) e).getValue()+" times"+"\n"+"\n";
-                    String replace = name.replace("[","").replace("]","").replace("{", "").replace("}", "");
-                    textArea.appendText(replace);
-                
-                    }
-     
-                
-    }
-    
-    
-        catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + getHash + "'");                
-        }catch(IOException ex) {
-            System.out.println("Error reading file '" + getHash + "'");                  
-            // Or we could just do this: 
-            // ex.printStackTrace();
-        } catch (ParseException ex) {
-            Logger.getLogger(FXMLViewListController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
-    
-    }
-     
-     private void getURL(String file) throws ParseException{
-     
-        JSONObject obj;
-        String getURL = file;
-        HashMap<String,Integer> list = new HashMap<>();
-        ArrayList<String> mine = new ArrayList<>();
-        
-         String line = null;
-         try {
-        // FileReader reads text files in the default encoding.
-            FileReader fileReader = new FileReader(getURL);
-
-        // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            while((line = bufferedReader.readLine()) != null) {
-            obj = (JSONObject) new JSONParser().parse(line);
-            String findURL = (String)obj.get("Message");
-        
-            Matcher matcher = Pattern.compile("\\b((?:https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])").matcher(findURL);
-            while (matcher.find()) {
-            mine.add(Arrays.toString(matcher.group(1).split(","))) ;
-        }
-        
-     }
-        Set<String> unique = new HashSet<>(mine);
-        for (String key : unique) {
-            list.put(key,Collections.frequency(mine, key));
-        }
-        
-            
-            StringBuilder sb = new StringBuilder();
-            String hash = null;
-            
-            //String formattedString = list.toString().replace("[","").replace("]","").replace("{", "").replace("}", "");
-            Object[] a = list.entrySet().toArray();
-            Arrays.sort(a, new Comparator() {public int compare(Object o1, Object o2) {return ((Map.Entry<String, Integer>) o2).getValue()
-            .compareTo(((Map.Entry<String, Integer>) o1).getValue());
-            
-            }
-                 });
-                   for (Object e : a) {
-                    
-                    String name = "URL "+((Map.Entry<String, Integer>) e).getKey() + " has been found an removed "+ ((Map.Entry<String, Integer>) e).getValue()+" times"+"\n"+"\n";
-                    String replaceme = name.replace("[","").replace("]","").replace("{", "").replace("}", "");
-                    textArea3.appendText(replaceme);
-                }
-       }          
-        catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + getURL + "'");                
-        }catch(IOException ex) {
-            System.out.println("Error reading file '" + getURL + "'");                  
-            // Or we could just do this: 
-            // ex.printStackTrace();
-        }
-    
-     
-     }
-}
+ }
