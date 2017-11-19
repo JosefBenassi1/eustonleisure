@@ -48,24 +48,17 @@ import org.json.simple.parser.ParseException;
 public class FXMLViewListController extends JsonReader implements Initializable {
 
     @FXML
-    TextArea textArea,textArea2,textArea3;
+    TextArea textArea,textArea2,textArea3,textArea4;
     @FXML
     Button backButton;
-    
-    String URLRegex = "\\b((?:https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])";
-    String hashRegex = "#\\s*(\\w+)";
-    String mentionRegex = "@\\s*(\\w+)";
-    String file = "/Users/josefbenassi/Documents/jsonjoe.json";
-
-  
-    
-    
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
        getTrendsForList(file, "Message", hashRegex, "#", "has been tweeted: ", textArea);
        getTrendsForList(file, "Message", mentionRegex, "@", "has been mentiond:  ", textArea2);
        getTrendsForList(file, "Message", URLRegex, "URL", "has been found and removed:  ", textArea3);
+       getTrendsForList(file, "Message", sirRegex, "SIR code & Nature", "has been emailed:  ", textArea4);
         
      } 
     
