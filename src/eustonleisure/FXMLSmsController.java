@@ -92,8 +92,9 @@ public class FXMLSmsController extends Message implements Initializable {
         
        }
     
+    
      private boolean isValidMobile(String s){      
-     String regex="\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}";      
+     String regex="\\d{11}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}";      
      return s.matches(regex);//returns true if input and regex matches otherwise false;
     }
 
