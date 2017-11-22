@@ -28,7 +28,7 @@ import org.json.simple.JSONObject;
 abstract public class Message {
     
     
-    protected void changeSmsOrTweetContent(String fileRead, String fileWrite, String mContent, Label messageID, TextField sender) throws FileNotFoundException, IOException{
+    protected void changeSmsOrTweetContent(String fileRead, String fileWrite, String mContent, String messageID, String sender) throws FileNotFoundException, IOException{
     
     
         
@@ -59,12 +59,12 @@ abstract public class Message {
         
     }
     
-    protected void writeToJsonFileNotEmail(Label messageID, TextField sender,StringBuilder messageContent, String file){
+    protected void writeToJsonFileNotEmail(String messageID, String sender,StringBuilder messageContent, String file){
     
      
     JSONObject obj = new JSONObject();  
-    obj.put("MID", messageID.getText());
-    obj.put("Sender",sender.getText());
+    obj.put("MID", messageID);
+    obj.put("Sender",sender);
     obj.put("Subject","n/a");
     obj.put("Message",messageContent.toString());
     
@@ -108,26 +108,26 @@ abstract public class Message {
         label.setText(msgInitial+Integer.toString(finalSeed));            
     }
 
-    protected void changeEmailContent(String emailContent,Label messageID, TextField sender, TextField subject, String file){
+    protected void changeEmailContent(String emailContent,String messageID,String sender, String subject, String file){
             
         String replace = emailContent.replaceAll("poo.[^poo]*.cocm", "<URL Quarintined> ");
         String replaceAll = replace.replaceAll("zhttp:c//wccww.[^htcctp:cc.]*.co.uck", "<URL Quarintined> ");
         
-        writeToJsonFileEmail(messageID,sender, subject,replaceAll,file);
+        writeToJsonFileEmail(messageID, sender, subject,replaceAll,file);
        
     
     
     
     }
  
-    protected void writeToJsonFileEmail(Label messageID, TextField sender,TextField subject,String messageContent, String file){
+    protected void writeToJsonFileEmail(String messageID, String sender,String subject,String messageContent, String file){
     
    
         
     JSONObject obj = new JSONObject();  
-    obj.put("MID", messageID.getText());
-    obj.put("Sender",sender.getText());
-    obj.put("Subject",subject.getText());
+    obj.put("MID", messageID);
+    obj.put("Sender",sender);
+    obj.put("Subject",subject);
     obj.put("Message",messageContent);
     
         
@@ -154,7 +154,7 @@ abstract public class Message {
    
    }
     
-    protected void changeEmailContentSir(String emailContent,Label messageID, TextField sender, TextField subject, TextField sirNumber, TextField sirDescription, String file){
+    protected void changeEmailContentSir(String emailContent,String messageID, String sender, String subject, String sirNumber, String sirDescription, String file){
             
         String replace = emailContent.replaceAll("poo.[^poo]*.cocm", "<URL Quarintined> ");
         String replaceAll = replace.replaceAll("zhttp:c//wccww.[^htcctp:cc.]*.co.uck", "<URL Quarintined> ");
@@ -166,15 +166,15 @@ abstract public class Message {
     
     }
     
-    protected void writeToJsonFileEmailSir(Label messageID, TextField sender,TextField subject,String messageContent,TextField sirNumber, TextField sirDescription, String file){
+    protected void writeToJsonFileEmailSir(String messageID, String sender,String subject,String messageContent,String sirNumber, String sirDescription, String file){
     
    
         
     JSONObject obj = new JSONObject();  
-    obj.put("MID", messageID.getText());
-    obj.put("Sender",sender.getText());
-    obj.put("Subject",subject.getText());
-    obj.put("Message","|"+sirNumber.getText()+" "+sirDescription.getText()+"|"+" "+messageContent);
+    obj.put("MID", messageID);
+    obj.put("Sender",sender);
+    obj.put("Subject",subject);
+    obj.put("Message","|"+sirNumber+" "+sirDescription+"|"+" "+messageContent);
     
         
        
@@ -200,7 +200,6 @@ abstract public class Message {
    
    }
   
-    
     protected void showWordCount(Label label, TextArea mContent){
     
         int wc =   mContent.getText().length();

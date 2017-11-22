@@ -126,7 +126,7 @@ import javafx.stage.Stage;
       
       if(mContent.getText().length() <=5){Alert.disply("Error","Please type a longer message"); return;}
       
-      changeEmailContent(mContent.getText(), messageID, sender,subject, fileName);
+      changeEmailContent(mContent.getText(), messageID.getText(), sender.getText(),subject.getText(), fileName);
     
    }
    if(sirCheckBox.isSelected()){
@@ -146,7 +146,7 @@ import javafx.stage.Stage;
       
         if(mContent.getText().length() <=5){Alert.disply("Error","Please type a longer message"); return;}
         
-        changeEmailContentSir(mContent.getText(), messageID, sender, subject, sirNumber, sirDescription, fileName);
+        changeEmailContentSir(mContent.getText(), messageID.getText(), sender.getText(), subject.getText(), sirNumber.getText(), sirDescription.getText(), fileName);
    }
     
       

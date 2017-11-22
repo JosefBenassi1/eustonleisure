@@ -77,6 +77,10 @@ public class FXMLReadFileController extends JsonReader implements Initializable 
         try (PrintWriter writer = new PrintWriter(storeFile)) {
              writer.print("");
          }
+        textArea.clear();
+        textArea2.clear();
+        textArea3.clear();
+        textArea4.clear();
         
     }
     

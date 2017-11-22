@@ -82,7 +82,7 @@ public class FXMLSmsController extends Message implements Initializable {
       
       if(mContent.getText().length() <=5){Alert.disply("Error","Please type a longer message"); return;}
           
-          changeSmsOrTweetContent(fileRead,fileWrite, mContent.getText(), messageID, sender); 
+          changeSmsOrTweetContent(fileRead,fileWrite, mContent.getText(), messageID.getText(), sender.getText()); 
           
           Parent _send_message_parent = FXMLLoader.load(getClass().getResource("FXMLSentScreen.fxml"));
           Scene _send_message_scene = new Scene(_send_message_parent,1000,600);

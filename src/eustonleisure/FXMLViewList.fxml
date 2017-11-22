@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eustonleisure.FXMLViewListController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="489.0" prefWidth="679.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eustonleisure.FXMLViewListController">
    <children>
       <StackPane prefHeight="63.0" prefWidth="600.0" style="-fx-background-color: pink;">
          <children>
@@ -26,7 +26,7 @@
       </StackPane>
       <StackPane prefHeight="130.0" prefWidth="600.0">
          <children>
-            <TextArea fx:id="textArea" prefHeight="145.0" prefWidth="600.0">
+            <TextArea fx:id="textArea" editable="false" prefHeight="145.0" prefWidth="600.0">
                <StackPane.margin>
                   <Insets left="200.0" right="200.0" />
                </StackPane.margin>
@@ -40,7 +40,7 @@
       </StackPane>
       <StackPane prefHeight="130.0" prefWidth="600.0">
          <children>
-            <TextArea fx:id="textArea2" prefHeight="94.0" prefWidth="600.0">
+            <TextArea fx:id="textArea2" editable="false" prefHeight="94.0" prefWidth="600.0">
                <StackPane.margin>
                   <Insets left="200.0" right="200.0" />
                </StackPane.margin>
@@ -54,7 +54,21 @@
       </StackPane>
       <StackPane prefHeight="130.0" prefWidth="600.0">
          <children>
-            <TextArea fx:id="textArea3" prefHeight="94.0" prefWidth="600.0">
+            <TextArea fx:id="textArea3" editable="false" prefHeight="94.0" prefWidth="600.0">
+               <StackPane.margin>
+                  <Insets left="200.0" right="200.0" />
+               </StackPane.margin>
+            </TextArea>
+         </children>
+      </StackPane>
+      <StackPane prefHeight="17.0" prefWidth="633.0">
+         <children>
+            <Label text="SIR Code&amp; Nature LIst" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="130.0" prefWidth="600.0">
+         <children>
+            <TextArea fx:id="textArea4" editable="false" prefHeight="94.0" prefWidth="600.0">
                <StackPane.margin>
                   <Insets left="200.0" right="200.0" />
                </StackPane.margin>
